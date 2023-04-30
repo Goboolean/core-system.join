@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "github.com/Goboolean/query-server/api/grpc";
+
+service StockFetcher {
+  rpc FetchStockAggs (StockFetchRequest) returns (stream StockFetchResponse) {}
+}
+
+message StockAggregate {
+  string event_type = 1;
+	float average     = 2;
+	float min         = 3;
+	float max         = 4;
+  float start       = 5;
+	float end         = 6;
+  int64 start_time  = 7;
+	int64 end_time    = 8;
+}
+
+message StockFetchRequest {
+  string stock_name = 1;
+}
+
+message StockFetchResponse {
+  repeated StockAggregate stock = 1;
+}
