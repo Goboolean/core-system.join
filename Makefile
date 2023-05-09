@@ -1,6 +1,3 @@
-
-
-
 grpc-generate:
 	protoc -I api/grpc/ \
 		--go_out=api/grpc/	\
