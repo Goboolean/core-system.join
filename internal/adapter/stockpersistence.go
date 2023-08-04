@@ -1,6 +1,8 @@
 package adapter
 
 import (
+	"sync"
+
 	"github.com/Goboolean/query-server/internal/domain/value"
 	"github.com/Goboolean/shared-packages/pkg/mongo"
 )
@@ -11,12 +13,30 @@ type StockPersistenceAdapter struct {
 	db mongo.Queries
 }
 
-func (a *StockPersistenceAdapter) FetchStock(stockChan chan<- value.StockAggs, errChan chan error, stock string) {
+func (a *StockPersistenceAdapter) GetStockBatch(name string) (*value.StockAggsMassive, error) {
+
+	stockChan := make(chan value.StockAggs)
+	errChan := make(chan error)
+
+	stock := value.NewStockAggsMassave(stockChan)
+
 	mongoStockChan := make(chan mongo.StockAggregate)
 
 	defer close(mongoStockChan)
+	defer close(stockChan)
+	defer close(errChan)
+
+	var wg sync.WaitGroup
+
+	wg.Add(1)
 
 	go func() {
+		if err := a.db.FetchAllStockBatch(mongo.Transaction{}, name, mongoStockChan); err != nil {
+			errChan <- err
+			return
+		}
+		wg.Done()
+
 		select {
 		case mongoStock := <-mongoStockChan:
 			stock := value.StockAggs{
@@ -31,13 +51,11 @@ func (a *StockPersistenceAdapter) FetchStock(stockChan chan<- value.StockAggs, e
 			}
 			stockChan <- stock
 
-		case _ = <-errChan:
+		case <-errChan:
 			return
 		}
 	}()
+	wg.Wait()
 
-	if err := a.db.FetchAllStockBatch(mongo.Transaction{}, stock, mongoStockChan); err != nil {
-		errChan <- err
-		return
-	}
+	return stock, nil
 }
