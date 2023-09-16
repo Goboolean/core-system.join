@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.21.12
-// source: query-server.proto
+// source: core-system.join.proto
 
 package grpc
 
@@ -132,5 +132,5 @@ var StockFetcher_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "query-server.proto",
+	Metadata: "core-system.join.proto",
 }

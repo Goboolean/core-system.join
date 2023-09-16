@@ -1,4 +1,4 @@
-module github.com/Goboolean/query-server
+module github.com/Goboolean/core-system.join
 
 go 1.18
 

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api;
 
-option go_package = "github.com/Goboolean/query-server/api/grpc";
+option go_package = "github.com/Goboolean/core-system.join/api/grpc";
 
 service StockFetcher {
   rpc FetchStockAggs (StockFetchRequest) returns (stream StockFetchResponse) {}

@@ -3,11 +3,9 @@ package adapter
 import (
 	"sync"
 
-	"github.com/Goboolean/query-server/internal/domain/value"
+	"github.com/Goboolean/core-system.join/internal/domain/value"
 	"github.com/Goboolean/shared-packages/pkg/mongo"
 )
-
-
 
 type StockPersistenceAdapter struct {
 	db mongo.Queries
@@ -41,13 +39,13 @@ func (a *StockPersistenceAdapter) GetStockBatch(name string) (*value.StockAggsMa
 		case mongoStock := <-mongoStockChan:
 			stock := value.StockAggs{
 				EventType: mongoStock.EventType,
-				Average: mongoStock.Avg,
-				Min: mongoStock.Min,
-				Max: mongoStock.Max,
-				Start: mongoStock.Start,
-				End: mongoStock.End,
+				Average:   mongoStock.Avg,
+				Min:       mongoStock.Min,
+				Max:       mongoStock.Max,
+				Start:     mongoStock.Start,
+				End:       mongoStock.End,
 				StartTime: mongoStock.StartTime,
-				EndTime: mongoStock.EndTime,
+				EndTime:   mongoStock.EndTime,
 			}
 			stockChan <- stock
 

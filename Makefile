@@ -4,4 +4,4 @@ grpc-generate:
 		--go_opt=paths=source_relative \
 		--go-grpc_out=api/grpc/	\
 		--go-grpc_opt=paths=source_relative	\
-		api/grpc/query-server.proto
+		api/grpc/core-system.join.proto
